@@ -1,0 +1,45 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Twitter API Test (JS)</title>
+<link rel="stylesheet" href="/stylesheets/1.css" type="text/css">
+<link rel="stylesheet" href="/stylesheets/reset.min.css" type="text/css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="application/javascript">
+
+var a = "";
+$(document).ready(function(){
+    $.getJSON("http://127.0.0.1:3000/home_timeline.json", function(data){
+	//$(".top").append("<h1 class='title'>"+data.+"</h1>");
+        $.each(data, function(i,item){
+            var txt = item.text
+                .replace(/(https?:\/\/[-a-z0-9._~:\/?#@!$&\'()*+,;=%]+)/ig,'<a href="$1">$1</a>')
+                .replace(/@+([_A-Za-z0-9-]+)/ig, '<a href="https://twitter.com/$1">@$1</a>')
+                .replace(/#+([_A-Za-z0-9-]+)/ig, '<a href="https://twitter.com/search?q=$1">#$1</a>');
+			//$(".sec_tweets").append("<p>"+txt+"<p>");
+			a += "<article class='tweet'>\n"+
+				"<header class='user_profile'>\n"+
+					"<a class='user_name' href='https://twitter.com/"+
+					item.user.screen_name+"'>@"+item.user.screen_name+"&nbsp;/&nbsp;"+item.user.name+
+					"</a>\n"+
+				"</header>\n"+
+			    "<p class='text'>"+txt+"</p>\n"+
+			"</article>\n";
+        });
+    });
+	$(".sec_tweets").append(a);
+});
+
+</script>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+    <header class="top"></header>
+    <section class="sec_tweets"></section>
+</div>
+
+</body>
+</html>
